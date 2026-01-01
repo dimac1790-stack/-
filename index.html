@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>PS3 Services</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+body{
+margin:0;
+background:linear-gradient(120deg,#020024,#090979,#00d4ff);
+font-family:Arial;
+color:white;
+}
+.panel{padding:20px;}
+.card{
+background:rgba(0,0,0,0.7);
+border-radius:20px;
+padding:20px;
+box-shadow:0 0 25px #00bfff;
+}
+select,input,button{
+width:100%;
+margin-top:12px;
+padding:14px;
+border-radius:15px;
+border:none;
+font-size:16px;
+}
+button{background:#00bfff;color:white;font-weight:bold;}
+.red{background:#ff004c;}
+.price{
+margin-top:10px;
+font-size:18px;
+color:#00ffea;
+}
+</style>
+</head>
+
+<body>
+<div class="panel">
+<div class="card">
+
+<h2>🎮 PS3 Услуги</h2>
+
+<select id="service" onchange="updatePrice()">
+<option value="20">🛏 Застелить кровать — 20 грн</option>
+<option value="150">🧽 Помыть посуду — 150 грн</option>
+<option value="15">🖐 Массаж руки — 15 грн</option>
+<option value="100">🦶 Массаж ног рукой — 100 грн</option>
+<option value="40">🦶 Массаж ног ногой — 40 грн</option>
+</select>
+
+<div class="price" id="price">Цена: 20 грн</div>
+
+<input id="time" placeholder="мм.дд.гггг чч:мм">
+
+<button onclick="sendTime()">🕒 Выбрать время</button>
+<button class="red" onclick="sendNow()">⚡ СРОЧНО СЕЙЧАС</button>
+
+</div>
+</div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+const service = document.getElementById("service");
+const priceDiv = document.getElementById("price");
+
+function updatePrice(){
+let price = service.value;
+priceDiv.innerText = "Цена: "+price+" грн";
+}
+
+function sendTime(){
+let name = service.options[service.selectedIndex].text;
+let price = service.value;
+let time = document.getElementById("time").value;
+if(!time){ alert("Введи время"); return; }
+
+tg.sendData(
+"Услуга: "+name+
+"\nЦена: "+price+" грн"+
+"\nВремя: "+time
+);
+}
+
+function sendNow(){
+let name = service.options[service.selectedIndex].text;
+let price = service.value;
+
+tg.sendData(
+"Услуга: "+name+
+"\nЦена: "+price+" грн"+
+"\nВремя: СРОЧНО СЕЙЧАС"
+);
+}
+</script>
+
+</body>
+</html>
